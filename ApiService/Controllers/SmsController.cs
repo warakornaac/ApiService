@@ -15,7 +15,6 @@ using System.Web;
 using System.Web.Helpers;
 using System.Web.Http;
 using System.Web.Mvc;
-using Newtonsoft.Json;
 using ApiService.Controllers;
 using RouteAttribute = System.Web.Http.RouteAttribute;
 
@@ -38,23 +37,19 @@ namespace ApiService.Controllers
         }
 
         //POST: Sms
-        [Route("Post/Sms")]
+        [Route("Post/SendSms")]
         public async Task<string> Post([FromBody] SmsModels models)
         {
             var client = new HttpClient();
             var request = new HttpRequestMessage(HttpMethod.Post, "https://portal-otp.smsmkt.com/api/send-message");
-
-            //var byteArray = Encoding.ASCII.GetBytes("6d0f2f7c7169cb0f215c23122c6b5bd2:DYKS1JPrGE1VmRjO");
-            //request.Headers.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
-            request.Headers.Add("api_key", "6d0f2f7c7169cb0f215c23122c6b5bd2");
-            request.Headers.Add("secret_key", "DYKS1JPrGE1VmRjO");
-
+            request.Headers.Add("api_key", "ea9ccaa9aff6e0198be2e0185c3caea2");
+            request.Headers.Add("secret_key", "QBFo5Es5A3OI5xYS");
 
             var json = JsonConvert.SerializeObject(new
             {
                 phone = models.Phone,
-                message = "รหัส OTP ของคุณคือ : " + models.Otp + " ref: " + models.Ref,
-                sender = "Demo-SMS"
+                message = models.Text,
+                sender = "TAC-AAC"
             });
 
             // สร้าง StringContent สำหรับ body ของคำขอ
@@ -67,14 +62,10 @@ namespace ApiService.Controllers
             var responseBody = await response.Content.ReadAsStringAsync();
             String modelsJson = JsonConvert.SerializeObject(models);
 
-            String lastId = _apiServerService.SaveApiResponse("Post/Sms", modelsJson.ToString(), models.User.ToString());
+            String lastId = _apiServerService.SaveApiResponse("Post/SendSms", modelsJson.ToString(), models.User.ToString());
             _apiServerService.UpdateApiRespone(lastId, responseBody.ToString());
 
-            //return responseBody;
             return responseBody;
-
         }
-
-
     }
 }

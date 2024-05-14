@@ -8,8 +8,7 @@ namespace ApiService.Models
     public class SmsModels
     {
         public string Phone { get; set; }
-        public string Otp { get; set; }
-        public string Ref { get; set; }
+        public string Text { get; set; }
         public string User { get; set; }
     }
     public class SendDeliveryModels
@@ -34,7 +33,6 @@ namespace ApiService.Models
         public PhoneNumberListItem[] PhoneNumberList { get; set; }
         public object[] BadPhoneNumberList { get; set; }
     }
-
     public class PhoneNumberListItem
     {
         public string Number { get; set; }
