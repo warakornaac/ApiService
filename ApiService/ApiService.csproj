@@ -133,7 +133,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiKeyAuthorizeAttribute\ApiKeyAuthorizeAttribute.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -173,12 +172,15 @@
     <Compile Include="Controllers\LineController.cs" />
     <Compile Include="Controllers\SmsController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Filters\ApiKeyAuthorizeAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="MessageHandlers\APIKeyMessageHandler.cs" />
     <Compile Include="Models\ModelData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IApiKeyProvider.cs" />
+    <Compile Include="Services\SimpleApiKeyProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />

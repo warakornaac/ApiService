@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using ApiService.Services;
 
-namespace ApiService.Services : IApiKeyProvider
+namespace ApiService.Services
 {
-    private const string ApiKey = "iL0UCJtAwwq8nVjvUJoVkM9CjFhyycLp";
-    public class SimpleApiKeyProvider
+    public class SimpleApiKeyProvider : IApiKeyProvider
     {
+        string ApiKey = "iL0UCJtAwwq8nVjvUJoVkM9CjFhyycLp";
+        public string GetApiKey()
+        {
             return ApiKey;
+        }
     }
 }
