@@ -39,14 +39,14 @@ $RECYCLE.BIN/
 .DS_Store
 
 # Config
-ApiServiceGit/Web.config
+ApiService/Web.config
 
 # Visual Studio 2015 cache/options directory
 .vs/
 
 /.vs
-/.vs/ApiServiceGit/config/applicationhost.config
-/.vs/ApiServiceGit/config/applicationhost.config
+/.vs/ApiService/config/applicationhost.config
+/.vs/ApiService/config/applicationhost.config
 
 packages/
 
