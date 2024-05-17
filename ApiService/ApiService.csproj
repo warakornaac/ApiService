@@ -181,6 +181,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IApiKeyProvider.cs" />
     <Compile Include="Services\SimpleApiKeyProvider.cs" />
+    <Compile Include="Services\VerifyApiKey.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />

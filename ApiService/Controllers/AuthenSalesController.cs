@@ -8,22 +8,25 @@ using System.DirectoryServices;
 using System.Configuration;
 using System.Data.SqlClient;
 using Newtonsoft.Json;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Helpers;
-using System.Web.Mvc;
-using ApiService.Controllers;
 using RouteAttribute = System.Web.Http.RouteAttribute;
 using AuthorizeAttribute = System.Web.Http.AuthorizeAttribute;
 using ApiService.Filters;
+using ApiService.Services;
+using ApiService.Models;
 
 namespace ApiService.Controllers
 {
     public class AuthenSalesController : ApiController
     {
-        [Route("Post/AuthenSale")]
+        private readonly ApiServerController _apiServerService;
+
+        // ตัวอย่างการสร้าง constructor ที่ไม่มีพารามิเตอร์
+        public AuthenSalesController()
+        {
+            // สร้าง instance ของ IApiServerService แบบไหนก็ได้ หรือไม่ต้องสร้างก็ได้
+            _apiServerService = new ApiServerController();
+        }
+        [Route("AuthenUserSales")]
         [ApiKeyAuthorize]
         public IHttpActionResult Post(string username, string password)
         {
@@ -91,6 +94,15 @@ namespace ApiService.Controllers
             }
             //string json = JsonConvert.SerializeObject(dataRes);
             //return json;
+            //keep log
+            var jsonLog = JsonConvert.SerializeObject(new
+            {
+                username = username,
+                password = password,
+            });
+            string jsonReturn = JsonConvert.SerializeObject(dataRes);
+            String lastId = _apiServerService.SaveApiResponse("AuthenSale", jsonLog, "");
+            _apiServerService.UpdateApiRespone(lastId, jsonReturn.ToString());
             return Json(dataRes);
         }
 
@@ -100,13 +112,14 @@ namespace ApiService.Controllers
             return string.Format("Hello");
         }
     }
-
+    //model
     public class DataRespond
     {
         public int statusCode { get; set; }
         public string errorMessage { get; set; }
         public List<result> result { get; set; }
     }
+    //array list result
     public class result
     {
         public string verify { get; set; }

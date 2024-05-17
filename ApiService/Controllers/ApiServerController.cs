@@ -52,8 +52,11 @@ namespace ApiService.Controllers
         //}
         public string SaveApiResponse(string method, string inservice, string user)
         {
+            if (string.IsNullOrEmpty(user)) { 
+                user = "SystemApiService";
+            }
             var outReturn = "";
-            var connectionString = ConfigurationManager.ConnectionStrings["MobileOrder_ConnectionString"].ConnectionString;
+            var connectionString = ConfigurationManager.ConnectionStrings["APIDB_ConnectionString"].ConnectionString;
             SqlConnection conn = new SqlConnection(connectionString);
             try
             {
@@ -80,7 +83,7 @@ namespace ApiService.Controllers
         }
         public void UpdateApiRespone(string id, string respon)
         {
-            var connectionString = ConfigurationManager.ConnectionStrings["MobileOrder_ConnectionString"].ConnectionString;
+            var connectionString = ConfigurationManager.ConnectionStrings["APIDB_ConnectionString"].ConnectionString;
             SqlConnection conn = new SqlConnection(connectionString);
             try
             {

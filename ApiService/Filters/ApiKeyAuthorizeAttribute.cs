@@ -14,7 +14,6 @@ namespace ApiService.Filters
     public class ApiKeyAuthorizeAttribute : AuthorizationFilterAttribute
     {
         //private const string ApiKeyHeaderName = "ApiKey";
-
         //public override void OnActionExecuting(HttpActionContext filterContext)
         //{
         //    var provider = filterContext.ControllerContext.Configuration.DependencyResolver.GetService(typeof(IApiKeyProvider)) as IApiKeyProvider;
@@ -30,27 +29,58 @@ namespace ApiService.Filters
 
         //    base.OnActionExecuting(filterContext);
         //}
-        private const string ApiKeyHeaderName = "ApiKey";
-        private static readonly string ApiKey = "iL0UCJtAwwq8nVjvUJoVkM9CjFhyycLp";
+        string txtResult = "";
+        private const string ApiKeyHeaderNameUsername = "Username";
+        private const string ApiKeyHeaderNamePassword = "Password";
+        private const string ApiKeyHeaderNameApiKey = "ApiKey";
         public override void OnAuthorization(HttpActionContext actionContext)
         {
-            if (actionContext.Request.Headers.Contains(ApiKeyHeaderName))
+            var headers = actionContext.Request.Headers;
+            //checy username
+            if (headers.Contains(ApiKeyHeaderNameUsername))
             {
-                var apiKeyHeaderValue = actionContext.Request.Headers.GetValues(ApiKeyHeaderName).FirstOrDefault();
-                if (apiKeyHeaderValue == ApiKey)
+                //check password
+                if (headers.Contains(ApiKeyHeaderNamePassword))
                 {
-                    return;
+                    //check apiKey
+                    if (headers.Contains(ApiKeyHeaderNameApiKey))
+                    {
+                        var apiKeyHeaderUsernameValue = headers.GetValues(ApiKeyHeaderNameUsername).FirstOrDefault();
+                        var apiKeyHeaderPasswordValue = headers.GetValues(ApiKeyHeaderNamePassword).FirstOrDefault();
+                        var apiKeyHeaderApiValue = headers.GetValues(ApiKeyHeaderNameApiKey).FirstOrDefault();
+                        var verifyApiKey = new VerifyApiKey().CheckApiKey(apiKeyHeaderUsernameValue, apiKeyHeaderPasswordValue, apiKeyHeaderApiValue);
+                        //api pass
+                        if (verifyApiKey == "Y")
+                        {
+                            return;
+                        }
+                        else  //api not pass
+                        {
+                            txtResult = verifyApiKey;
+                        }
+                    }
+                    else
+                    {
+                        txtResult = "Required Header ApiKey";
+                    }
                 }
                 else
                 {
-                    actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Forbidden, "Invalid API Key");
+                    txtResult = "Required Header Password";
                 }
             }
-            else 
+            else
             {
-                actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Forbidden, "Required Header API Key");
+                txtResult = "Required Header Username";
             }
-
+            if (txtResult != "") {
+                var dataResult = new {
+                    statusCode = HttpStatusCode.Forbidden,
+                    errorMessage = txtResult,
+                    result = ""
+                };
+                actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Forbidden, dataResult);
+            }
         }
     }
 }
